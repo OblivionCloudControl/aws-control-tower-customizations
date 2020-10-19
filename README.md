@@ -1,3 +1,15 @@
+##
+
+This is a fork of https://github.com/awslabs/aws-control-tower-customizations.
+
+It was forked initially because we required the ability to [deploy templates to the root account](https://github.com/awslabs/aws-control-tower-customizations/issues/15).
+
+A PR to that effect [was created](https://github.com/awslabs/aws-control-tower-customizations/pull/8) but after more
+than half a year there is little hope for it to be merged.
+
+It seems that the solution in the original is intended to serve as a guideline rather than a software-library that
+will be maintained.
+ 
 ## Customizations for AWS Control Tower Solution
 The Customizations for AWS Control Tower solution combines AWS Control Tower and other highly-available, trusted AWS services to help customers more quickly set up a secure, multi-account AWS environment based on AWS best practices. Customers can easily add customizations to their AWS Control Tower landing zone using an AWS CloudFormation template and service control policies (SCPs). Customers can deploy their custom template and policies to both individual accounts and organizational units (OUs) within their organization. Customizations for AWS Control Tower integrates with AWS Control Tower lifecycle events to ensure that resource deployments stay in sync with the customer's landing zone. For example, when a new account is created using the AWS Control Tower account factory, the solution ensures that all resources attached to the account's OUs will be automatically deployed. Before deploying this solution, customers need to have an AWS Control Tower landing zone deployed in their account.
 
