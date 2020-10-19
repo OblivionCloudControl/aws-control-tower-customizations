@@ -1,0 +1,13 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: S3 buckets required for holding code to deploy
+Resources:
+  CustomControlTowerTemplatesS3Bucket:
+  Type: AWS::S3::Bucket
+  Properties:
+    BucketName: %TEMPLATE_BUCKET_NAME%
+    BucketEncryption:
+      ServerSideEncryptionConfiguration:
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256
+    VersioningConfiguration:
+      Status: Enabled
