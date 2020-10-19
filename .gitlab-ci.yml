@@ -5,12 +5,12 @@ stages:
 image: python:3.9
 before_script:
   - pip install pipenv
-  - pipenv install
+  - pipenv install --system --deploy
 
 platform:
   stage: build
   script:
-    - pipenv run aws cloudformation deploy deployment/custom-control-tower-buckets.cfn.yml
+    - aws cloudformation deploy deployment/custom-control-tower-buckets.cfn.yml
   only:
     refs:
       - master
@@ -24,12 +24,12 @@ build:
   stage: build
   script:
     - bash deployment/substitute-vars.sh
-    - pipenv run cfn-lint
-    - pipenv run ./deployment/build-s3-dist.sh
+    - cfn-lint
+    - ./deployment/build-s3-dist.sh
 
 deploy:
   stage: deploy
   only:
     - master
   script:
-    - pipenv run aws cloudformation deploy s3://custom-control-tower-templates/custom-control-tower-initiation.template # TODO finish command
+    - aws cloudformation deploy s3://custom-control-tower-templates/custom-control-tower-initiation.template # TODO finish command
