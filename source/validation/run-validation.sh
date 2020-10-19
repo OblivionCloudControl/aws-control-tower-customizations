@@ -75,13 +75,6 @@ for file_name in $check_files ; do
             set_failed_exit_status
           fi
 
-          echo "Running cfn_nag_scan on $tmp_file"
-          cfn_nag_scan --input-path "$tmp_file"
-          if [ $? -ne 0 ]
-          then
-            echo "ERROR: CFN Nag failed validation - $file_name"
-            set_failed_exit_status
-          fi
         elif [[ $file_name == *json ]]; then
           echo "Running json validation on $tmp_file"
           python -m json.tool < "$tmp_file"

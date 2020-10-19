@@ -39,10 +39,6 @@ build_dependencies () {
     pip install cfn_flip
     pip freeze
 
-    # Install CFN Nag
-    ruby -v
-    gem -v
-    gem install cfn-nag -v 0.3.64
 }
 
 scp_dependencies () {
