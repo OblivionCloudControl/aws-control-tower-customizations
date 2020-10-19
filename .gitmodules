@@ -1,0 +1,3 @@
+[submodule "deployment/custom_control_tower_configuration/example_configuration"]
+	path = deployment/custom_control_tower_configuration/example_configuration
+	url = ssh://git@gitlab.ripe.net:7999/IaC/aws/provisioning-controltower.git

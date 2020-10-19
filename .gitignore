@@ -137,7 +137,6 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-deployment/custom_control_tower_configuration
 deployment/deployment
 deployment/global-s3-assets
 deployment/regional-s3-assets
