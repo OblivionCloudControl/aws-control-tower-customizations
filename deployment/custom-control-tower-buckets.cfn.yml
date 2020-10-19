@@ -11,3 +11,13 @@ Resources:
             SSEAlgorithm: AES256
     VersioningConfiguration:
       Status: Enabled
+  CustomControlTowerDistS3Bucket:
+  Type: AWS::S3::Bucket
+  Properties:
+    BucketName: %DIST_BUCKET_NAME%
+    BucketEncryption:
+      ServerSideEncryptionConfiguration:
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256
+    VersioningConfiguration:
+      Status: Enabled
