@@ -1,10 +1,11 @@
 stages:
+  - prepare
   - test
   - build
   - publish
   - deploy
 
-image: python:3.9
+image: $CI_REGISTRY_IMAGE/gitlab-ci:$CI_COMMIT_BRANCH
 variables:
   PIPENV_CACHE_DIR: $CI_PROJECT_DIR/.cache
   SOLUTION_NAME: Ripe-Control-Tower-custom
@@ -12,15 +13,28 @@ variables:
   TEMPLATE_BUCKET_NAME: custom-control-tower-templates
   DIST_BUCKET_NAME: custom-control-tower-dist
   CODE_BUCKET_NAME: custom-control-tower-code
-before_script:
-  - pip install pipenv
-  - pipenv install --system --ignore-pipfile --dev
 cache:
   key:
     files:
       - Pipfile.lock
   paths:
     - .cache
+
+control-tower-customizations/gitlab-ci:
+  stage: prepare
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build --tag $CI_REGISTRY_IMAGE/gitlab-ci:$CI_COMMIT_BRANCH -f .gitlab/Dockerfile .
+    - docker push $CI_REGISTRY_IMAGE/gitlab-ci:$CI_COMMIT_BRANCH
+  only:
+    changes:
+      - .gitlab/Dockerfile
+      -  Pipfile.lock
+
 
 lint:
   stage: test
@@ -31,7 +45,6 @@ lint:
 build:
   stage: build
   script:
-    - apt update && apt install zip
     - ./deployment/substitute-vars.sh
     - ./deployment/build-s3-dist.sh $DIST_BUCKET_NAME $TEMPLATE_BUCKET_NAME $SOLUTION_NAME $VERSION
   artifacts:
