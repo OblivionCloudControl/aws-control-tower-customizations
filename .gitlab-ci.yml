@@ -24,19 +24,16 @@ cache:
 lint:
   stage: test
   script:
-    - bash deployment/substitute-vars.sh
+    - ./deployment/substitute-vars.sh
     - cfn-lint
 
 platform:
   stage: build
   script:
     - ./deployment/substitute-vars.sh
-    - aws cloudformation deploy deployment/custom-control-tower-buckets.cfn.yml
+    - aws cloudformation deploy --stack-name custom-control-tower-buckets --template-file deployment/custom-control-tower-buckets.cfn.yml
   only:
-    refs:
-      - master
-    changes:
-      - deployment/custom-control-tower-buckets.cfn.yml
+    - master
 
 build:
   stage: build
@@ -49,7 +46,7 @@ build:
 
 deploy:
   stage: deploy
+  script:
+    - aws cloudformation deploy s3://$TEMPLATE_BUCKET_NAME/custom-control-tower-initiation.template # TODO finish command
   only:
     - master
-  script:
-    - aws cloudformation deploy s3://custom-control-tower-templates/custom-control-tower-initiation.template # TODO finish command
