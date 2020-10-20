@@ -1,11 +1,26 @@
 stages:
+  - test
   - build
   - deploy
 
 image: python:3.9
+variables:
+  PIPENV_CACHE_DIR: $CI_BUILDS_DIR/venv
 before_script:
   - pip install pipenv
-  - pipenv install --system --deploy --dev
+  - pipenv install --system --ignore-pipfile --dev
+cache:
+  key:
+    files:
+      - Pipfile.lock
+  paths:
+    - venv/
+
+lint:
+  stage: test
+  script:
+    - bash deployment/substitute-vars.sh
+    - cfn-lint
 
 platform:
   stage: build
@@ -24,7 +39,6 @@ build:
   stage: build
   script:
     - bash deployment/substitute-vars.sh
-    - cfn-lint
     - ./deployment/build-s3-dist.sh
 
 deploy:
