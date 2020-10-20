@@ -6,5 +6,6 @@ do
     -e "s/%VERSION%/$VERSION/" \
     -e "s/%TEMPLATE_BUCKET_NAME%/$TEMPLATE_BUCKET_NAME/" \
     -e "s/%DIST_BUCKET_NAME%/$DIST_BUCKET_NAME/" \
+    -e "s/%CODE_BUCKET_NAME%/$CODE_BUCKET_NAME/" \
     $VAR
 done
