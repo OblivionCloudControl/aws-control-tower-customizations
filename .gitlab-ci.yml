@@ -3,7 +3,7 @@ stages:
   - build
   - deploy
 
-image: python:3.9
+image: python:3.8
 variables:
   PIPENV_CACHE_DIR: $CI_PROJECT_DIR/.cache
   SOLUTION_NAME: Ripe Control Tower custom
