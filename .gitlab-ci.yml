@@ -6,9 +6,14 @@ stages:
 image: python:3.9
 variables:
   PIPENV_CACHE_DIR: $CI_BUILDS_DIR/venv
+  SOLUTION_NAME: Ripe Control Tower custom
+  VERSION: $CI_COMMIT_SHORT_SHA
+  TEMPLATE_BUCKET_NAME: custom-control-tower-templates
+  DIST_BUCKET_NAME: custom-control-tower-dist
 before_script:
   - pip install pipenv
-  - pipenv install --system --ignore-pipfile --dev
+  - pipenv install --system --ignore-pipfile --dev --verbose
+  - pipenv --venv
 cache:
   key:
     files:
@@ -25,21 +30,22 @@ lint:
 platform:
   stage: build
   script:
+    - ./deployment/substitute-vars.sh
     - aws cloudformation deploy deployment/custom-control-tower-buckets.cfn.yml
   only:
     refs:
       - master
     changes:
       - deployment/custom-control-tower-buckets.cfn.yml
-  artifacts:
-    paths:
-      - deployment/
 
 build:
   stage: build
   script:
-    - bash deployment/substitute-vars.sh
-    - ./deployment/build-s3-dist.sh
+    - ./deployment/substitute-vars.sh
+    - ./deployment/build-s3-dist.sh $DIST_BUCKET_NAME $TEMPLATE_BUCKET_NAME $SOLUTION_NAME $VERSION
+  artifacts:
+    paths:
+      - deployment/
 
 deploy:
   stage: deploy
