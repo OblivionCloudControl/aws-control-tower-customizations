@@ -13,7 +13,7 @@ variables:
 before_script:
   - pip install pipenv
   - pipenv install --system --ignore-pipfile --dev
-  - ls -l .cache/*
+  - echo $PIPENV_CACHE_DIR
 cache:
   key:
     files:
