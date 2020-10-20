@@ -44,8 +44,8 @@ platform:
   script:
     - ./deployment/substitute-vars.sh
     - aws cloudformation deploy --no-fail-on-empty-changeset --stack-name custom-control-tower-buckets --template-file deployment/custom-control-tower-buckets.cfn.yml
-    - aws s3 cp deployment/global-s3-assets s3://$CODE_BUCKET_NAME/$SOLUTION_NAME/$VERSION/
-    - aws s3 cp deployment/regional-s3-assets s3://$CODE_BUCKET_NAME/$SOLUTION_NAME/$VERSION/
+    - aws s3 cp deployment/global-s3-assets s3://$CODE_BUCKET_NAME/$SOLUTION_NAME/$VERSION/ --recursive --acl bucket-owner-full-control
+    - aws s3 cp deployment/regional-s3-assets s3://$CODE_BUCKET_NAME/$SOLUTION_NAME/$VERSION/ --recursive --acl bucket-owner-full-control
   only:
     - master
 
