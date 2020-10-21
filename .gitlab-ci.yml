@@ -7,10 +7,10 @@ stages:
 
 image: $CI_REGISTRY_IMAGE/gitlab-ci:$CI_COMMIT_BRANCH
 variables:
-  SOLUTION_NAME: Ripe-Control-Tower-custom
+  SOLUTION_NAME: customizations-for-aws-control-tower
   VERSION: v1.2.1
   TEMPLATE_BUCKET_NAME: solutions-reference
-  DIST_BUCKET_NAME: custom-control-tower-dist
+  DIST_BUCKET_NAME: ripe-custom-control-tower
 
 control-tower-customizations/gitlab-ci:
   stage: prepare
