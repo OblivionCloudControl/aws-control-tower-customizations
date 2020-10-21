@@ -8,7 +8,7 @@ stages:
 image: $CI_REGISTRY_IMAGE/gitlab-ci:$CI_COMMIT_BRANCH
 variables:
   SOLUTION_NAME: Ripe-Control-Tower-custom
-  VERSION: $CI_COMMIT_SHORT_SHA
+  VERSION: v1.2.1
   TEMPLATE_BUCKET_NAME: solutions-reference
   DIST_BUCKET_NAME: custom-control-tower-dist
 
