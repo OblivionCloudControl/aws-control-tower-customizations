@@ -1,7 +1,7 @@
 stages:
   - prepare
-  - test
   - build
+  - test
   - publish
   - deploy
 
@@ -11,7 +11,6 @@ variables:
   VERSION: $CI_COMMIT_SHORT_SHA
   TEMPLATE_BUCKET_NAME: custom-control-tower-templates
   DIST_BUCKET_NAME: custom-control-tower-dist
-  CODE_BUCKET_NAME: custom-control-tower-code
 
 control-tower-customizations/gitlab-ci:
   stage: prepare
@@ -28,35 +27,35 @@ control-tower-customizations/gitlab-ci:
       - .gitlab/Dockerfile
       -  Pipfile.lock
 
-lint:
-  stage: test
-  script:
-    - ./deployment/substitute-vars.sh
-    - cfn-lint
-
 build:
   stage: build
   script:
-    - ./deployment/substitute-vars.sh
     - ./deployment/build-s3-dist.sh $DIST_BUCKET_NAME $TEMPLATE_BUCKET_NAME $SOLUTION_NAME $VERSION
   artifacts:
     paths:
       - deployment/global-s3-assets
       - deployment/regional-s3-assets
 
+lint:
+  stage: test
+  script:
+    - cfn-lint
+
 platform:
   stage: publish
   script:
-    - ./deployment/substitute-vars.sh
-    - aws cloudformation deploy --no-fail-on-empty-changeset --stack-name custom-control-tower-buckets --template-file deployment/custom-control-tower-buckets.cfn.yml
-    - aws s3 cp deployment/global-s3-assets s3://$CODE_BUCKET_NAME/$SOLUTION_NAME/$VERSION/ --recursive
-    - aws s3 cp deployment/regional-s3-assets s3://$CODE_BUCKET_NAME/$SOLUTION_NAME/$VERSION/ --recursive
+    - |
+      aws cloudformation deploy --no-fail-on-empty-changeset --stack-name custom-control-tower-deploy \
+      --parameter-overrides TemplateBucketName=$TEMPLATE_BUCKET_NAME DistBucketName=$DIST_BUCKET_NAME \
+      --template-file deployment/custom-control-tower-deploy.cfn.yml
+    - aws s3 cp deployment/global-s3-assets s3://$DIST_BUCKET_NAME-$AWS_DEFAULT_REGION/$SOLUTION_NAME/$VERSION/ --recursive
+    - aws s3 cp deployment/regional-s3-assets s3://$DIST_BUCKET_NAME-$AWS_DEFAULT_REGION/$SOLUTION_NAME/$VERSION/ --recursive
   only:
     - master
 
 deploy:
   stage: deploy
   script:
-    - aws cloudformation deploy s3://$TEMPLATE_BUCKET_NAME/custom-control-tower-initiation.template # TODO finish command
+    - aws cloudformation deploy --no-fail-on-empty-changeset --stack-name custom-control-tower-initiation --template-file deployment/global-s3-assets/custom-control-tower-initiation.template
   only:
     - master

@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: S3 buckets required for holding code to deploy
+
+Parameters:
+  TemplateBucketName:
+    Description: TEMPLATE_BUCKET_NAME
+    Type: String
+  DistBucketName:
+    Description: DIST_BUCKET_NAME
+    Type: String
+
+Resources:
+  CustomControlTowerTemplatesS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref TemplateBucketName
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      VersioningConfiguration:
+        Status: Enabled
+  CustomControlTowerDistS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${DistBucketName}-${AWS::Region}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      VersioningConfiguration:
+        Status: Enabled
+  CustomControlTowerGitLabUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: CustomControlTowerCodeCommitGitLabUser
+      Path: "/"
+      ManagedPolicyArns:
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/AdministratorAccess
+      Policies:
+        - PolicyName: "Custom-Control-Tower-CodeCommit-Policy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "codecommit:GitPull"
+                  - "codecommit:GitPush"
+                Resource:
+                  - "*"

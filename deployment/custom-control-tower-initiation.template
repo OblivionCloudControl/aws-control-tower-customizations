@@ -257,24 +257,6 @@ Resources:
           Bucket: %TEMPLATE_BUCKET_NAME%
           Key: !Sub %SOLUTION_NAME%/%VERSION%/custom-control-tower-configuration-${AWS::Region}.zip
 
-  CustomControlTowerCodeCommitGitLabUser:
-    Type: AWS::IAM::User
-    Condition: IsNewCodeCommitRepository
-    Properties:
-      UserName: CustomControlTowerCodeCommitGitLabUser
-      Path: "/"
-      Policies:
-        - PolicyName: "Custom-Control-Tower-CodeCommit-Policy"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: "Allow"
-                Action:
-                  - "codecommit:GitPull"
-                  - "codecommit:GitPush"
-                Resource:
-                  - !GetAtt CustomControlTowerCodeCommit.Arn
-
  # SSM Parameter to store the git repository name
   CustomControlTowerRepoNameParameter:
     Type: AWS::SSM::Parameter
