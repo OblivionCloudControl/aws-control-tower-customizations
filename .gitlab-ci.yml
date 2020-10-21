@@ -7,18 +7,11 @@ stages:
 
 image: $CI_REGISTRY_IMAGE/gitlab-ci:$CI_COMMIT_BRANCH
 variables:
-  PIPENV_CACHE_DIR: $CI_PROJECT_DIR/.cache
   SOLUTION_NAME: Ripe-Control-Tower-custom
   VERSION: $CI_COMMIT_SHORT_SHA
   TEMPLATE_BUCKET_NAME: custom-control-tower-templates
   DIST_BUCKET_NAME: custom-control-tower-dist
   CODE_BUCKET_NAME: custom-control-tower-code
-cache:
-  key:
-    files:
-      - Pipfile.lock
-  paths:
-    - .cache
 
 control-tower-customizations/gitlab-ci:
   stage: prepare
@@ -34,7 +27,6 @@ control-tower-customizations/gitlab-ci:
     changes:
       - .gitlab/Dockerfile
       -  Pipfile.lock
-
 
 lint:
   stage: test

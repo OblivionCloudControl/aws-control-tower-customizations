@@ -4,4 +4,3 @@ ADD Pipfile .
 ADD Pipfile.lock .
 RUN pip install pipenv
 RUN pipenv install --system --ignore-pipfile --dev
-
