@@ -60,6 +60,6 @@ deploy:
       aws cloudformation deploy --no-fail-on-empty-changeset --stack-name custom-control-tower-initiation \
       --template-file deployment/global-s3-assets/custom-control-tower-initiation.template --capabilities CAPABILITY_NAMED_IAM \
       --parameter-overrides "PipelineApprovalEmail=''" "CodePipelineSource=AWS CodeCommit" \
-      --s3-bucket $DIST_BUCKET_NAME
+      --s3-bucket $DIST_BUCKET_NAME-$AWS_DEFAULT_REGION
   only:
     - master
