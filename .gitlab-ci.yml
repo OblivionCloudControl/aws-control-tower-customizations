@@ -9,7 +9,7 @@ image: $CI_REGISTRY_IMAGE/gitlab-ci:$CI_COMMIT_BRANCH
 variables:
   SOLUTION_NAME: Ripe-Control-Tower-custom
   VERSION: $CI_COMMIT_SHORT_SHA
-  TEMPLATE_BUCKET_NAME: ripe-custom-control-tower
+  TEMPLATE_BUCKET_NAME: solutions-reference
   DIST_BUCKET_NAME: custom-control-tower-dist
 
 control-tower-customizations/gitlab-ci:
@@ -46,7 +46,7 @@ platform:
   script:
     - |
       aws cloudformation deploy --no-fail-on-empty-changeset --stack-name custom-control-tower-deploy \
-      --parameter-overrides TemplateBucketName=$TEMPLATE_BUCKET_NAME DistBucketName=$DIST_BUCKET_NAME \
+      --parameter-overrides DistBucketName=$DIST_BUCKET_NAME \
       --template-file deployment/custom-control-tower-deploy.cfn.yml --capabilities CAPABILITY_NAMED_IAM
     - aws s3 cp deployment/global-s3-assets s3://$DIST_BUCKET_NAME-$AWS_DEFAULT_REGION/$SOLUTION_NAME/$VERSION/ --recursive
     - aws s3 cp deployment/regional-s3-assets s3://$DIST_BUCKET_NAME-$AWS_DEFAULT_REGION/$SOLUTION_NAME/$VERSION/ --recursive
@@ -60,6 +60,6 @@ deploy:
       aws cloudformation deploy --no-fail-on-empty-changeset --stack-name custom-control-tower-initiation \
       --template-file deployment/global-s3-assets/custom-control-tower-initiation.template --capabilities CAPABILITY_NAMED_IAM \
       --parameter-overrides "PipelineApprovalEmail=''" "CodePipelineSource=AWS CodeCommit" \
-      --s3-bucket $TEMPLATE_BUCKET_NAME
+      --s3-bucket $DIST_BUCKET_NAME
   only:
     - master

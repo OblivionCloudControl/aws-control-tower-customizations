@@ -2,24 +2,11 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: S3 buckets required for holding code to deploy
 
 Parameters:
-  TemplateBucketName:
-    Description: TEMPLATE_BUCKET_NAME
-    Type: String
   DistBucketName:
     Description: DIST_BUCKET_NAME
     Type: String
 
 Resources:
-  CustomControlTowerTemplatesS3Bucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Ref TemplateBucketName
-      BucketEncryption:
-        ServerSideEncryptionConfiguration:
-          - ServerSideEncryptionByDefault:
-              SSEAlgorithm: AES256
-      VersioningConfiguration:
-        Status: Enabled
   CustomControlTowerDistS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
