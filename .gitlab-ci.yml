@@ -9,7 +9,7 @@ image: $CI_REGISTRY_IMAGE/gitlab-ci:$CI_COMMIT_BRANCH
 variables:
   SOLUTION_NAME: Ripe-Control-Tower-custom
   VERSION: $CI_COMMIT_SHORT_SHA
-  TEMPLATE_BUCKET_NAME: custom-control-tower-templates
+  TEMPLATE_BUCKET_NAME: ripe-custom-control-tower
   DIST_BUCKET_NAME: custom-control-tower-dist
 
 control-tower-customizations/gitlab-ci:
