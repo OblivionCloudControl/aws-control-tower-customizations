@@ -30,6 +30,7 @@ control-tower-customizations/gitlab-ci:
 build:
   stage: build
   script:
+    - pip install --target source/ -r source/requirements.txt
     - ./deployment/build-s3-dist.sh $DIST_BUCKET_NAME $TEMPLATE_BUCKET_NAME $SOLUTION_NAME $VERSION
   artifacts:
     paths:
